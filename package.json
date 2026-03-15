@@ -1,29 +1,35 @@
 {
-  "name": "zero_dep_node_api",
-  "version": "1.0.0",
-  "description": "A zero dependency rest api written in pure javascript",
-  "main": "src/main.js",
-  "type": "module",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node --experimental-sqlite --env-file=.env .",
-    "dev": "node --experimental-sqlite --env-file=.env --watch-path=./src --watch-preserve-output ."
-  },
-  "keywords": [
-    "rest",
-    "api",
-    "node",
-    "javascript",
-    "sqlite"
-  ],
-  "author": "Roberto Saliola",
-  "license": "GPL-3.0-only",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Roberto286/zero-dep-api"
-  },
-  "bugs": {
-    "url": "https://github.com/Roberto286/zero-dep-api/issues"
-  },
-  "homepage": "https://github.com/Roberto286/zero-dep-api/blob/main/README.md"
+	"name": "zero",
+	"version": "1.0.0",
+	"description": "A zero dependency express-like framework written in pure javascript",
+	"main": "src/main.js",
+	"type": "module",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start": "node --experimental-sqlite --env-file=.env .",
+		"dev": "node --experimental-sqlite --env-file=.env --watch-path=./src --watch-preserve-output ."
+	},
+	"keywords": [
+		"rest",
+		"api",
+		"node",
+		"javascript",
+		"sqlite"
+	],
+	"author": "Roberto Saliola",
+	"license": "GPL-3.0-only",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Roberto286/zero"
+	},
+	"bugs": {
+		"url": "https://github.com/Roberto286/zero/issues"
+	},
+	"homepage": "https://github.com/Roberto286/zero/blob/main/README.md",
+	"exports": {
+		".": "./src/main.js"
+	},
+	"files": [
+		"src"
+	]
 }
