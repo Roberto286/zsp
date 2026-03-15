@@ -8,3 +8,6 @@ database.sqlite3
 
 # WebStorm http test files
 *.http
+
+# Build
+dist

@@ -1,13 +1,14 @@
 {
-	"name": "zero",
+	"name": "@roberto286/zsp",
 	"version": "1.0.0",
-	"description": "A zero dependency express-like framework written in pure javascript",
-	"main": "src/main.js",
+	"description": "A zsp dependency express-like framework written in pure javascript",
+	"main": "./dist/main.js",
 	"type": "module",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"start": "node --experimental-sqlite --env-file=.env .",
-		"dev": "node --experimental-sqlite --env-file=.env --watch-path=./src --watch-preserve-output ."
+		"dev": "node --experimental-sqlite --env-file=.env --watch-path=./src --watch-preserve-output .",
+		"build": "npx -p typescript -p tsup tsup src/main.js --format esm,cjs --minify --out-dir dist --clean"
 	},
 	"keywords": [
 		"rest",
@@ -20,16 +21,17 @@
 	"license": "GPL-3.0-only",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/Roberto286/zero"
+		"url": "https://github.com/Roberto286/zsp"
 	},
 	"bugs": {
-		"url": "https://github.com/Roberto286/zero/issues"
+		"url": "https://github.com/Roberto286/zsp/issues"
 	},
-	"homepage": "https://github.com/Roberto286/zero/blob/main/README.md",
+	"homepage": "https://github.com/Roberto286/zsp/blob/main/README.md",
 	"exports": {
-		".": "./src/main.js"
+		"import": "./dist/main.js",
+		"require": "./dist/main.cjs"
 	},
 	"files": [
-		"src"
+		"dist"
 	]
 }
