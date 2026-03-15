@@ -1,6 +1,6 @@
 {
 	"name": "@roberto286/zsp",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"description": "A zero dependency express-like framework written in pure javascript",
 	"main": "./dist/main.js",
 	"type": "module",
@@ -9,7 +9,7 @@
 		"start": "node --experimental-sqlite --env-file=.env .",
 		"dev": "node --experimental-sqlite --env-file=.env --watch-path=./src --watch-preserve-output .",
 		"build": "npx -p typescript -p tsup tsup src/main.js --format esm,cjs --minify --out-dir dist --clean",
-		"publish": "npm run build && npm publish --access public"
+		"prepublishOnly": "npm run build"
 	},
 	"keywords": [
 		"rest",
