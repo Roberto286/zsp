@@ -1,7 +1,7 @@
 {
 	"name": "@roberto286/zsp",
-	"version": "1.0.0",
-	"description": "A zsp dependency express-like framework written in pure javascript",
+	"version": "1.0.1",
+	"description": "A zero dependency express-like framework written in pure javascript",
 	"main": "./dist/main.js",
 	"type": "module",
 	"scripts": {
