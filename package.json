@@ -6,9 +6,7 @@
 	"type": "module",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"start": "node --experimental-sqlite --env-file=.env .",
-		"dev": "node --experimental-sqlite --env-file=.env --watch-path=./src --watch-preserve-output .",
-		"build": "npx -p typescript -p tsup tsup src/main.js --format esm,cjs --minify --out-dir dist --clean",
+		"build": "npx -p typescript -p tsup tsup src/main.ts --format esm,cjs --minify --out-dir dist --clean",
 		"prepublishOnly": "npm run build"
 	},
 	"keywords": [
