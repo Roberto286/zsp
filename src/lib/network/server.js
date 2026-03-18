@@ -64,6 +64,10 @@ class CustomServer extends Server {
   static getInstance() {
     return CustomServer.#instance || new CustomServer();
   }
+
+  listen(...args) {
+    super.listen(...args)
+  }
 }
 
 export const getServer = CustomServer.getInstance;
