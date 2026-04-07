@@ -1,26 +1,24 @@
-import { Types } from "../../enums/types.enum.js";
+export const validateSchema = (body, SchemaClass) => {
+  if (!body || typeof body !== "object") return false;
 
-export const validateSchema = (body, schema) => {
-  for (const key of Object.keys(body)) {
-    if (typeof schema === Types.OBJECT && !Object.hasOwn(schema, key)) {
-      return false;
-    }
+  const instance = new SchemaClass(); // una sola istanza
+  const expectedKeys = Object.getOwnPropertyNames(instance);
 
-    const instance = new schema();
-    if (
-      !Object.getOwnPropertyNames(instance).every((k) =>
-        Object.keys(body).includes(k)
-      )
-    ) {
-      return false;
-    }
+  for (const key of expectedKeys) {
+    // campo obbligatorio mancante
+    if (!Object.hasOwn(body, key)) return false;
 
-    if (
-      instance[key] === Types.OBJECT ||
-      typeof instance[key] === Types.FUNCTION
-    ) {
-      return validateSchema(body[key], instance[key]);
+    const expectedType = typeof instance[key]; // es. "string", "number"
+    const actualType = typeof body[key];
+
+    // validazione tipo primitivo
+    if (expectedType !== "object" && expectedType !== actualType) return false;
+
+    // ricorsione per oggetti annidati
+    if (expectedType === "object" && instance[key] !== null) {
+      if (!validateSchema(body[key], instance[key].constructor)) return false;
     }
   }
+
   return true;
 };
