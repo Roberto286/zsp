@@ -1,7 +1,3 @@
-# Application
-.env
-database.sqlite3
-
 # IDE
 .idea
 .vscode
