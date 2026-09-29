@@ -14,8 +14,8 @@ export const validateSchema = (body, SchemaClass) => {
     // validazione tipo primitivo
     if (expectedType !== "object" && expectedType !== actualType) return false;
 
-    // ricorsione per oggetti annidati
-    if (expectedType === "object" && instance[key] !== null) {
+    // ricorsione per oggetti annidati (non array)
+    if (expectedType === "object" && instance[key] !== null && !Array.isArray(instance[key])) {
       if (!validateSchema(body[key], instance[key].constructor)) return false;
     }
   }
