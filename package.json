@@ -5,7 +5,7 @@
 	"main": "./dist/main.js",
 	"type": "module",
 	"scripts": {
-		"test": "node --test test/",
+		"test": "node --test test/*.test.js",
 		"build:dev": "npx -p typescript -p tsup tsup src/main.js --watch --format esm,cjs --minify --out-dir dist --clean --sourcemap",
 		"build": "npx -p typescript -p tsup tsup src/main.js --format esm,cjs --minify --out-dir dist --clean",
 		"prepublishOnly": "npm run build"
