@@ -1,6 +1,7 @@
 # IDE
 .idea
 .vscode
+.omp
 
 # WebStorm http test files
 *.http
