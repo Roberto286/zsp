@@ -150,6 +150,85 @@ app.get('/custom', (req, res) => {
 });
 ```
 
+### Query Parameters
+
+```javascript
+app.get('/search', (req, res) => {
+  res.send({ query: req.query, searchTerm: req.query.q });
+});
+```
+
+Access query parameters from the URL query string via `req.query`:
+
+```
+GET /search?q=javascript&limit=10
+```
+
+Returns: `{ query: { q: "javascript", limit: "10" }, searchTerm: "javascript" }`
+
+### Global Middleware
+
+Register middleware functions that execute before route handlers via `app.use()`:
+
+```javascript
+// Middleware runs in order of registration
+app.use((req, res, next) => {
+  req.startTime = Date.now();
+  next(); // Call next to continue to the next middleware/handler
+});
+
+app.use((req, res, next) => {
+  req.userId = 'user-123';
+  next();
+});
+
+app.get('/timing', (req, res) => {
+  const elapsed = Date.now() - req.startTime;
+  res.send({ userId: req.userId, elapsed });
+});
+```
+
+If middleware doesn't call `next()`, the chain halts and the route handler is not invoked.
+
+### CORS Support
+
+Enable CORS headers on all responses via `app.enableCors()`:
+
+```javascript
+app.enableCors({
+  origin: '*',
+  methods: 'GET,POST,PUT,DELETE,PATCH',
+  headers: 'Content-Type'
+});
+
+app.get('/api/data', (req, res) => {
+  res.send({ data: [1, 2, 3] });
+});
+```
+
+All responses will include `Access-Control-Allow-Origin`, `Access-Control-Allow-Methods`, and `Access-Control-Allow-Headers` headers.
+
+### Custom Response Content Types
+
+Send responses with non-JSON content types using the third parameter to `res.send()`:
+
+```javascript
+app.get('/html', (req, res) => {
+  res.send('<h1>Hello</h1><p>HTML response</p>', 200, 'text/html');
+});
+
+app.get('/plain', (req, res) => {
+  res.send('Plain text response', 200, 'text/plain');
+});
+
+app.get('/csv', (req, res) => {
+  res.send('name,age\nalice,30\nbob,25', 200, 'text/csv');
+});
+```
+
+The third parameter defaults to `application/json` if not specified.
+
+
 ## Why Zero Dependencies?
 
 Because `node_modules` shouldn't be a lifestyle choice.
