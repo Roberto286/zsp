@@ -1,5 +1,7 @@
 # ZSP
 
+[![npm version](https://img.shields.io/npm/v/@roberto286/zsp.svg)](https://www.npmjs.com/package/@roberto286/zsp)
+
 ## The express-like framework with zero dependencies. Yes, you read that right. ZERO
 
 ```text

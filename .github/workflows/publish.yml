@@ -5,11 +5,15 @@ on:
     branches:
       - main
 
+concurrency:
+  group: publish-main
+  cancel-in-progress: false
+
 jobs:
   publish:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       id-token: write
     steps:
       - name: Checkout
@@ -24,27 +28,37 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Determine version
+        id: version
+        run: |
+          PKG_NAME=$(node -p "require('./package.json').name")
+          PUBLISHED_VERSION=$(npm view "$PKG_NAME" version 2>/dev/null || echo "none")
+          PKG_VERSION=$(node -p "require('./package.json').version")
+          echo "published_version=$PUBLISHED_VERSION" >> "$GITHUB_OUTPUT"
+          if [ "$PKG_VERSION" = "$PUBLISHED_VERSION" ]; then
+            echo "needs_bump=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "needs_bump=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Bump patch version
+        if: steps.version.outputs.needs_bump == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          NEW_VERSION=$(npm version patch --no-git-tag-version)
+          git commit -am "chore: release $NEW_VERSION"
+          git tag "$NEW_VERSION"
+          git push origin HEAD:main
+          git push origin "$NEW_VERSION"
+
       - name: Build
         run: npm run build
 
       - name: Test
         run: npm test
 
-      - name: Check version
-        id: version
-        run: |
-          PKG_VERSION=$(node -p "require('./package.json').version")
-          PUBLISHED_VERSION=$(npm view "$(node -p "require('./package.json').name")" version 2>/dev/null || echo "none")
-          echo "pkg_version=$PKG_VERSION" >> "$GITHUB_OUTPUT"
-          echo "published_version=$PUBLISHED_VERSION" >> "$GITHUB_OUTPUT"
-          if [ "$PKG_VERSION" = "$PUBLISHED_VERSION" ]; then
-            echo "skip=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "skip=false" >> "$GITHUB_OUTPUT"
-          fi
-
       - name: Publish
-        if: steps.version.outputs.skip == 'false'
         run: npm publish --access public --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
