@@ -18,6 +18,18 @@ export const validateSchema = (body, SchemaClass) => {
     if (expectedType === "object" && instance[key] !== null && !Array.isArray(instance[key])) {
       if (!validateSchema(body[key], instance[key].constructor)) return false;
     }
+
+    // validazione array
+    if (Array.isArray(instance[key])) {
+      if (!Array.isArray(body[key])) return false;
+      // se l'array schema ha elementi, valida il tipo
+      if (instance[key].length > 0) {
+        const expectedItemType = typeof instance[key][0];
+        for (const item of body[key]) {
+          if (typeof item !== expectedItemType) return false;
+        }
+      }
+    }
   }
 
   return true;
