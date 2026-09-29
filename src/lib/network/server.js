@@ -13,6 +13,7 @@ class CustomServer extends Server {
 
 
   constructor() {
+    super();
     this.#registerHttpMethods();
     this.on("request", this.#handleRequest.bind(this));
     CustomServer.#instance = this;
