@@ -94,7 +94,15 @@ class CustomServer extends Server {
 
   #handleError(error, res) {
     console.error(error);
-    res.send("Internal server error", 500);
+    if (process.env.NODE_ENV === 'development') {
+      res.send({ 
+        error: "Internal server error", 
+        message: error.message,
+        stack: error.stack 
+      }, 500);
+    } else {
+      res.send("Internal server error", 500);
+    }
   }
 
   #sendBadRequest(res) {
