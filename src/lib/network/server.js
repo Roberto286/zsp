@@ -7,9 +7,9 @@ import { validateSchema } from "./schema-validator.js";
 
 class CustomServer extends Server {
   static #instance = null;
+  #middlewares = [];
 
   constructor() {
-    super();
     this.#registerHttpMethods();
     this.on("request", this.#handleRequest.bind(this));
     CustomServer.#instance = this;
@@ -38,6 +38,30 @@ class CustomServer extends Server {
   async #applyMiddlewares(req, res) {
     enhanceResponse(res);
     req.body = await parseBody(req);
+    
+    // Execute user-registered middleware chain
+    for (const middleware of this.#middlewares) {
+      let nextCalled = false;
+      await new Promise((resolve, reject) => {
+        try {
+          middleware(req, res, () => {
+            nextCalled = true;
+            resolve();
+          });
+        } catch (e) {
+          reject(e);
+        }
+      });
+      // If middleware didn't call next(), halt the chain
+      if (!nextCalled) {
+        break;
+      }
+    }
+  }
+
+  use(fn) {
+    this.#middlewares.push(fn);
+    return this;
   }
 
   #registerHttpMethods() {
