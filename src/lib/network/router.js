@@ -2,6 +2,10 @@ export class Router {
 
     static routes = new Map();
 
+    static reset() {
+        Router.routes.clear();
+    }
+
     static register(path, method, handler, options) {
         const key = `${method}:${path}`;
 

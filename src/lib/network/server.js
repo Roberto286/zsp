@@ -42,14 +42,14 @@ class CustomServer extends Server {
   async #applyMiddlewares(req, res) {
     enhanceResponse(res);
     req.body = await parseBody(req);
-    
+
     // Apply CORS headers if enabled
     if (this.#corsEnabled) {
       res.setHeader('Access-Control-Allow-Origin', this.#corsOptions.origin || '*');
       res.setHeader('Access-Control-Allow-Methods', this.#corsOptions.methods || 'GET,POST,PUT,DELETE,PATCH,OPTIONS');
       res.setHeader('Access-Control-Allow-Headers', this.#corsOptions.headers || 'Content-Type');
     }
-    
+
     // Execute user-registered middleware chain
     for (const middleware of this.#middlewares) {
       let nextCalled = false;
@@ -96,10 +96,10 @@ class CustomServer extends Server {
   #handleError(error, res) {
     console.error(error);
     if (process.env.NODE_ENV === 'development') {
-      res.send({ 
-        error: "Internal server error", 
+      res.send({
+        error: "Internal server error",
         message: error.message,
-        stack: error.stack 
+        stack: error.stack
       }, 500);
     } else {
       res.send("Internal server error", 500);
@@ -114,9 +114,17 @@ class CustomServer extends Server {
     return CustomServer.#instance || new CustomServer();
   }
 
-  listen(...args) {
-    super.listen(...args)
+  static reset() {
+    CustomServer.#instance = null;
   }
 }
 
 export const getServer = CustomServer.getInstance;
+
+// Test-only: forces getServer() to construct a fresh instance and clears
+// registered routes. Not part of the public API surface (main.js does not
+// re-export it), so it never ships in the built dist/ bundle.
+export const resetServer = () => {
+  CustomServer.reset();
+  Router.reset();
+};
