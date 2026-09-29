@@ -31,6 +31,10 @@ export const validateSchema = (body, SchemaClass) => {
       }
     }
   }
+  // rejezione campi extra non dichiarati nello schema
+  const bodyKeys = Object.keys(body);
+  const hasExtraFields = bodyKeys.some(key => !expectedKeys.includes(key));
+  if (hasExtraFields) return false;
 
   return true;
 };
